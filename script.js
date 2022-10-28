@@ -24,7 +24,28 @@ function loadBackgroundImage(context, imgPath) {
     })
 }
 
+function createRectangle(context, x, y, width, height) {
+    const topX = x - (width / 2);
+    const topY = y - (height / 2);
+    context.beginPath();
+    context.rect(topX, topY, width, height);
+    context.stroke();
+    return context;
+}
+
+function createBottomFixedRectangle(context, bottomX, bottomY, width, height) {
+    const middleX = bottomX;
+    const middleY = bottomY - (height / 2);
+    createRectangle(context, middleX, middleY, width, height);
+    return context;
+}
+
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 
-loadBackgroundImage(ctx, 'lime-cat.jpg');
+canvas.width = 500;
+canvas.height = 500;
+
+// loadBackgroundImage(ctx, 'lime-cat.jpg');
+
+createBottomFixedRectangle(ctx, 100, 300, 100, 200)
