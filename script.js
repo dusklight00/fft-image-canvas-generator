@@ -40,12 +40,24 @@ function createBottomFixedRectangle(context, bottomX, bottomY, width, height) {
     return context;
 }
 
+function createFFT(context, numFFT, padding) {
+    const canvas = context.canvas;
+
+    const DEFAULT_MARGIN = 10;
+    const DEFAULT_HEIGHT = 100;
+
+    for(let i = 0; i < numFFT; i++) {
+        const barWidth = (canvas.width / numFFT) - padding;
+        const bottomX = i * (barWidth + padding) + ((barWidth + padding) / 2)
+        const bottomY = canvas.height - DEFAULT_MARGIN;
+        createBottomFixedRectangle(context, bottomX, bottomY, barWidth, DEFAULT_HEIGHT);
+    }
+}
+
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 
 canvas.width = 500;
 canvas.height = 500;
 
-// loadBackgroundImage(ctx, 'lime-cat.jpg');
-
-createBottomFixedRectangle(ctx, 100, 300, 100, 200)
+createFFT(ctx, 10, 10);
