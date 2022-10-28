@@ -40,17 +40,23 @@ function createBottomFixedRectangle(context, bottomX, bottomY, width, height) {
     return context;
 }
 
-function createFFT(context, numFFT, padding) {
+function createFFT(context, arrFFT) {  
+    const numFFT = arrFFT.length;
     const canvas = context.canvas;
 
     const DEFAULT_MARGIN = 10;
-    const DEFAULT_HEIGHT = 100;
+    const DEFAULT_PADDING = 10;
+    const DEFAULT_FFT_PARTION = 0.5;
 
     for(let i = 0; i < numFFT; i++) {
-        const barWidth = (canvas.width / numFFT) - padding;
-        const bottomX = i * (barWidth + padding) + ((barWidth + padding) / 2)
+        const barValue = arrFFT[i];
+        const maxValue = Math.max(...arrFFT);
+        const maxHeight = (canvas.height - (2 * DEFAULT_MARGIN)) * DEFAULT_FFT_PARTION
+        const barDisplayHeight = (barValue / maxValue) * maxHeight;
+        const barWidth = (canvas.width / numFFT) - DEFAULT_PADDING;
+        const bottomX = i * (barWidth + DEFAULT_PADDING) + ((barWidth + DEFAULT_PADDING) / 2)
         const bottomY = canvas.height - DEFAULT_MARGIN;
-        createBottomFixedRectangle(context, bottomX, bottomY, barWidth, DEFAULT_HEIGHT);
+        createBottomFixedRectangle(context, bottomX, bottomY, barWidth, barDisplayHeight);
     }
 }
 
@@ -60,4 +66,6 @@ const ctx = canvas.getContext('2d');
 canvas.width = 500;
 canvas.height = 500;
 
-createFFT(ctx, 10, 10);
+const arrFFT = [10, 20, 10, 20, 30, 50, 4, 1];
+
+createFFT(ctx, arrFFT);
