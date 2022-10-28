@@ -24,6 +24,19 @@ function loadBackgroundImage(context, imgPath) {
     })
 }
 
+function createRoundRectangleTopLeftAnchor(context, x, y, width, height, radius) {
+    if (width < (2 * radius)) radius = width / 2;
+    if (height < (2 * radius)) radius = height / 2;
+    context.beginPath();
+    context.moveTo(x + radius, y);
+    context.arcTo(x + width, y, x + width, y + height, radius);
+    context.arcTo(x + width, y + height, x, y + height, radius);
+    context.arcTo(x, y + height, x, y, radius);
+    context.arcTo(x, y, x + width, y, radius);
+    context.closePath();
+    return context;
+}
+
 function createRectangle(context, x, y, width, height) {
     const topX = x - (width / 2);
     const topY = y - (height / 2);
@@ -33,10 +46,24 @@ function createRectangle(context, x, y, width, height) {
     return context;
 }
 
+function createRoundRectangle(context, x, y, width, height, radius) {
+    const topX = x - (width / 2);
+    const topY = y - (height / 2);
+    createBottomFixedRectangle(context, topX, topY, width, height, radius);
+    return context;
+}
+
 function createBottomFixedRectangle(context, bottomX, bottomY, width, height) {
     const middleX = bottomX;
     const middleY = bottomY - (height / 2);
     createRectangle(context, middleX, middleY, width, height);
+    return context;
+}
+
+function createBottomFixedRoundRectangle(context, bottomX, bottomY, width, height) {
+    const middleX = bottomX;
+    const middleY = bottomY - (height / 2);
+    createRoundRectangle(context, middleX, middleY, width, height);
     return context;
 }
 
@@ -68,4 +95,4 @@ canvas.height = 500;
 
 const arrFFT = [10, 20, 10, 20, 30, 50, 4, 1];
 
-createFFT(ctx, arrFFT);
+createFFT(ctx, arrFFT)
