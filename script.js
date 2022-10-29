@@ -1,27 +1,29 @@
 function loadImage(context, imgPath, config) {
-  const x = config.x;
-  const y = config.y;
-  const width = config.width;
-  const height = config.height;
-  const image = new Image();
-  image.src = imgPath;
-  image.onload = function () {
-    context.drawImage(image, x, y, width, height);
-  };
-
-  return context;
+  return new Promise((resolve, reject) => {
+    const x = config.x;
+    const y = config.y;
+    const width = config.width;
+    const height = config.height;
+    const image = new Image();
+    image.src = imgPath;
+    image.onload = function () {
+      context.drawImage(image, x, y, width, height);
+      resolve(context);
+    };
+  });
 }
 
-function loadBackgroundImage(context, imgPath) {
+async function loadBackgroundImage(context, imgPath) {
   const canvas = context.canvas;
   const canvasWidth = canvas.width;
   const canvasHeight = canvas.height;
-  loadImage(context, imgPath, {
+  await loadImage(context, imgPath, {
     x: 0,
     y: 0,
     width: canvasWidth,
     height: canvasHeight,
   });
+  return context;
 }
 
 function createRoundRectangleTopLeftAnchor(
@@ -118,4 +120,7 @@ canvas.height = 500;
 
 const arrFFT = [10, 20, 10, 20, 30, 50, 4, 1];
 
-createFFT(ctx, arrFFT);
+(async function () {
+  await loadBackgroundImage(ctx, "lime-cat.jpg");
+  createFFT(ctx, arrFFT);
+})();
